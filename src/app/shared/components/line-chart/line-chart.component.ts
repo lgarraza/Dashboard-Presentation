@@ -40,6 +40,8 @@ function areaGradient(context: ScriptableContext<'line'>) {
 export class LineChartComponent implements OnChanges {
   @Input() title = '';
   @Input() subtitle = '';
+  /** Small heading shown directly above the plotted chart, distinct from the card title/subtitle. */
+  @Input() chartLabel = '';
   @Input() metrics: Metric[] = [];
   @Input() unit = '';
   @Input() loading = false;

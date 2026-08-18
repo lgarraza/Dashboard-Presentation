@@ -1,28 +1,29 @@
-<div class="filters-panel" *ngIf="filters">
-  <label class="filters-panel__field">
-    <span>Category</span>
-    <select
-      [ngModel]="filters.category"
-      (ngModelChange)="onCategoryChange($event)"
-    >
-      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-    </select>
-  </label>
+<div class="flex items-center gap-3" *ngIf="filters">
+  <select
+    class="rounded-lg border border-card-border bg-white px-3 py-1.5 text-sm font-medium text-foreground outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
+    [ngModel]="filters.category"
+    (ngModelChange)="onCategoryChange($event)"
+  >
+    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+  </select>
 
-  <div class="filters-panel__field">
-    <span>Time range</span>
-    <div class="filters-panel__time-ranges">
-      <button
-        type="button"
-        *ngFor="let range of timeRanges"
-        [class.filters-panel__time-range--active]="filters.timeRange === range"
-        class="filters-panel__time-range"
-        (click)="onTimeRangeChange(range)"
-      >
-        {{ range }}
-      </button>
-    </div>
+  <div class="flex rounded-lg border border-card-border p-0.5">
+    <button
+      type="button"
+      *ngFor="let range of timeRanges"
+      class="rounded-md px-3 py-1 text-sm font-medium transition"
+      [ngClass]="filters.timeRange === range ? 'bg-primary text-white' : 'text-muted hover:text-foreground'"
+      (click)="onTimeRangeChange(range)"
+    >
+      {{ range }}
+    </button>
   </div>
 
-  <button type="button" class="filters-panel__reset" (click)="onReset()">Reset</button>
+  <button
+    type="button"
+    class="rounded-lg border border-card-border px-3 py-1.5 text-sm font-medium text-muted transition hover:text-foreground"
+    (click)="onReset()"
+  >
+    Reset
+  </button>
 </div>

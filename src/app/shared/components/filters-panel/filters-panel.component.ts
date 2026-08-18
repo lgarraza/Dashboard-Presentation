@@ -5,7 +5,6 @@ import { FilterState } from '../../../store/metrics/metrics.state';
 @Component({
   selector: 'app-filters-panel',
   templateUrl: './filters-panel.component.html',
-  styleUrl: './filters-panel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FiltersPanelComponent {

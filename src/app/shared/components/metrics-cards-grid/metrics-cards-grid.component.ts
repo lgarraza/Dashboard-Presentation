@@ -19,8 +19,8 @@ interface KpiCardView extends KpiCardDef {
 const CARD_DEFS: KpiCardDef[] = [
   { label: 'CPU Usage', metricName: 'CPU Usage', icon: 'cpu', color: 'blue', trendGoodDirection: 'down' },
   { label: 'Memory Usage', metricName: 'Memory Usage', icon: 'memory', color: 'green', trendGoodDirection: 'down' },
-  { label: 'API Response Time', metricName: 'API Response Time', icon: 'clock', color: 'purple', trendGoodDirection: 'down' },
-  { label: 'Network Latency', metricName: 'Network Latency', icon: 'globe', color: 'orange', trendGoodDirection: 'down' },
+  { label: 'API Response Time', metricName: 'API Response Time', icon: 'clock', color: 'blue', trendGoodDirection: 'down' },
+  { label: 'Network Latency', metricName: 'Network Latency', icon: 'globe', color: 'green', trendGoodDirection: 'down' },
 ];
 
 /**

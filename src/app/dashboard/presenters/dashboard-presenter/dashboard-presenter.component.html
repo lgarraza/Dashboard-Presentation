@@ -1,19 +1,25 @@
 <div class="min-h-full bg-muted-bg pb-12">
   <!-- Header -->
   <header class="border-b border-card-border bg-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <div class="mx-auto flex flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
       <h1 class="flex items-center gap-2.5 text-lg font-semibold tracking-tight text-foreground">
-        <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M4 19h4V9H4v10zm6 0h4V4h-4v15zm6 0h4v-7h-4v7z" />
-          </svg>
-        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="#3B82F6">
+          <path d="M12 2l10 18H2L12 2z" />
+        </svg>
         <span>Metrics Dashboard</span>
       </h1>
 
-      <button type="button" (click)="onSignalrToggle()">
-        <app-live-badge [active]="signalrConnected" activeLabel="Live" inactiveLabel="Connect live updates"></app-live-badge>
-      </button>
+      <div class="flex flex-wrap items-center gap-3">
+        <app-filters-panel
+          [filters]="filters"
+          (filtersChange)="filtersChange.emit($event)"
+          (reset)="resetFilters.emit()"
+        ></app-filters-panel>
+
+        <button type="button" (click)="onSignalrToggle()">
+          <app-live-badge [active]="signalrConnected" activeLabel="Live" inactiveLabel="Connect live updates"></app-live-badge>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -26,41 +32,26 @@
       {{ error }}
     </div>
 
-    <!-- Filters -->
-    <app-filters-panel
-      [filters]="filters"
-      (filtersChange)="filtersChange.emit($event)"
-      (reset)="resetFilters.emit()"
-    ></app-filters-panel>
-
     <!-- KPI cards -->
     <app-metrics-cards-grid [metrics]="kpiMetrics" [history]="kpiHistory" [loading]="loading"></app-metrics-cards-grid>
 
     <!-- Charts -->
-    <div>
-      <div class="mb-3 flex items-baseline justify-between">
-        <h2 class="text-lg font-semibold tracking-tight text-foreground">{{ filters.category }} overview</h2>
-        <span class="text-sm text-muted" *ngIf="metrics.length">
-          Average: <span class="font-medium text-foreground">{{ averageValue | number: '1.0-1' }}</span>
-        </span>
-      </div>
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <app-line-chart
+        [title]="filters.category + ' overview'"
+        subtitle="Average values across all metrics"
+        [chartLabel]="filters.category + ' Trend'"
+        [metrics]="metrics"
+        [unit]="metrics[0]?.unit ?? ''"
+        [loading]="loading"
+      ></app-line-chart>
 
-      <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <app-line-chart
-          [title]="filters.category + ' overview'"
-          subtitle="Average values across all metrics"
-          [metrics]="metrics"
-          [unit]="metrics[0]?.unit ?? ''"
-          [loading]="loading"
-        ></app-line-chart>
-
-        <app-bar-chart
-          [title]="filters.category + ' comparison'"
-          subtitle="Resource usage comparison (latest)"
-          [metrics]="metrics"
-          [loading]="loading"
-        ></app-bar-chart>
-      </div>
+      <app-bar-chart
+        [title]="filters.category + ' Comparison'"
+        subtitle="Resource usage comparison (latest)"
+        [metrics]="metrics"
+        [loading]="loading"
+      ></app-bar-chart>
     </div>
 
     <!-- Table -->
