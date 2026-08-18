@@ -44,15 +44,28 @@ export class MetricsCardsGridComponent implements OnChanges {
   cards: KpiCardView[] = [];
 
   private readonly lastValueByName = new Map<string, number>();
+  private readonly lastMetricByName = new Map<string, Metric>();
 
   ngOnChanges(): void {
+    // All 4 cards share one combined `metrics` array, so this fires whenever
+    // ANY of the 4 KPI metrics updates — not just this card's own. Advancing
+    // lastValueByName unconditionally on every call would overwrite a card's
+    // "previous" value with its own current value on the very next unrelated
+    // tick, permanently flattening its trend one render after it briefly
+    // showed correctly. Only advance the window when this metric's own
+    // reading actually changed (a new object reference from the store).
     this.cards = CARD_DEFS.map((def) => {
       const metric = this.metrics.find((m) => m.name === def.metricName);
-      const previousValue = this.lastValueByName.get(def.metricName);
+      const priorMetric = this.lastMetricByName.get(def.metricName);
 
-      if (metric) {
-        this.lastValueByName.set(def.metricName, metric.value);
+      if (metric && metric !== priorMetric) {
+        if (priorMetric) {
+          this.lastValueByName.set(def.metricName, priorMetric.value);
+        }
+        this.lastMetricByName.set(def.metricName, metric);
       }
+
+      const previousValue = this.lastValueByName.get(def.metricName);
 
       return { ...def, metric, previousValue, sparklineData: this.history[def.metricName] ?? [] };
     });
