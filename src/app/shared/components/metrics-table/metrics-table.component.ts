@@ -39,9 +39,12 @@ export class MetricsTableComponent implements OnChanges {
   pagedRows: MetricRow[] = [];
 
   ngOnChanges(): void {
+    // Live SignalR pushes update `metrics` every few seconds — don't reset
+    // to page 1 on every refresh, only on the user's own search/filter
+    // actions (see onSearchChange/onCategoryChange). applyFilterSortAndPage
+    // clamps currentPage if the new data has fewer pages than before.
     this.categories = [...new Set(this.metrics.map((m) => m.category))].sort();
     this.rows = this.buildRows(this.metrics);
-    this.currentPage = 1;
     this.applyFilterSortAndPage();
   }
 
@@ -92,6 +95,10 @@ export class MetricsTableComponent implements OnChanges {
       .filter((row) => this.selectedCategory === 'all' || row.metric.category === this.selectedCategory)
       .filter((row) => !term || row.metric.name.toLowerCase().includes(term))
       .sort((a, b) => this.compare(a, b));
+
+    // Clamp rather than reset: keeps the user's place on live data refreshes,
+    // only snapping back if the current page no longer exists.
+    this.currentPage = Math.min(this.currentPage, this.totalPages);
 
     const start = (this.currentPage - 1) * this.pageSize;
     this.pagedRows = this.filteredRows.slice(start, start + this.pageSize);
