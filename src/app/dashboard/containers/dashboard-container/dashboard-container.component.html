@@ -1,0 +1,16 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-dashboard-presenter
+    [metrics]="vm.metrics"
+    [kpiMetrics]="vm.kpiMetrics"
+    [kpiHistory]="vm.kpiHistory"
+    [filters]="vm.filters"
+    [loading]="vm.loading"
+    [error]="vm.error"
+    [signalrConnected]="vm.signalrConnected"
+    [averageValue]="vm.averageValue"
+    (filtersChange)="onFiltersChange($event)"
+    (resetFilters)="onResetFilters()"
+    (connectSignalr)="onConnectSignalr()"
+    (disconnectSignalr)="onDisconnectSignalr()"
+  ></app-dashboard-presenter>
+</ng-container>
