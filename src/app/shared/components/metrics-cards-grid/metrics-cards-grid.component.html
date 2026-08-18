@@ -1,0 +1,19 @@
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <button
+    type="button"
+    class="text-left"
+    *ngFor="let card of cards; trackBy: trackByLabel"
+    (click)="onCardClick(card.metric)"
+  >
+    <app-kpi-card
+      [label]="card.label"
+      [metric]="card.metric"
+      [previousValue]="card.previousValue"
+      [loading]="loading"
+      [icon]="card.icon"
+      [color]="card.color"
+      [trendGoodDirection]="card.trendGoodDirection"
+      [sparklineData]="card.sparklineData"
+    ></app-kpi-card>
+  </button>
+</div>

@@ -1,0 +1,28 @@
+<div class="filters-panel" *ngIf="filters">
+  <label class="filters-panel__field">
+    <span>Category</span>
+    <select
+      [ngModel]="filters.category"
+      (ngModelChange)="onCategoryChange($event)"
+    >
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+  </label>
+
+  <div class="filters-panel__field">
+    <span>Time range</span>
+    <div class="filters-panel__time-ranges">
+      <button
+        type="button"
+        *ngFor="let range of timeRanges"
+        [class.filters-panel__time-range--active]="filters.timeRange === range"
+        class="filters-panel__time-range"
+        (click)="onTimeRangeChange(range)"
+      >
+        {{ range }}
+      </button>
+    </div>
+  </div>
+
+  <button type="button" class="filters-panel__reset" (click)="onReset()">Reset</button>
+</div>
